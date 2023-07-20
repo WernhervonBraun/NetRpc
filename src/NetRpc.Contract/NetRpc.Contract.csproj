@@ -5,8 +5,6 @@
     <Description>Contract attribute define for NetRpc.</Description>
     <RootNamespace>NetRpc</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>NetRpc.Contract.Json</PackageId>
   </PropertyGroup>
 
 </Project>

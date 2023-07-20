@@ -3,8 +3,6 @@
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <Description>Provide MiniProfiler support for NetRpc.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>NetRpc.MiniProfiler.Json</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

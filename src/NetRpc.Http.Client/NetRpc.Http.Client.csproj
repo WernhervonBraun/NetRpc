@@ -3,8 +3,6 @@
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <Description>Provide Http client channel implementation for NetRpc.</Description>
     <SignAssembly>true</SignAssembly>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>NetRpc.Http.Client.Json</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0" />
