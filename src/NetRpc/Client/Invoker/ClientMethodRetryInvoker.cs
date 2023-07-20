@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using NetRpc.Contract;
 using Polly;
@@ -34,7 +35,9 @@ internal sealed class ClientMethodRetryInvoker : IMethodInvoker
         var ret = await CallAsync(targetMethod, args);
         if (ret == null)
             return default!;
-        return (T)ret;
+        if (ret is JsonElement jsonElement)
+            return jsonElement.Deserialize<T>()!;
+        return default!;
     }
 
     private async Task<object?> CallAsync(MethodInfo targetMethod, object?[] args)

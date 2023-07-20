@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <Description>Provide http channel implementation for NetRpc.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>NetRpc.Http.Json</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="SwaggerUi3\dialog\dialog.css" />

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Text.Json;
 
 namespace NetRpc;
 
@@ -26,7 +27,17 @@ public static class ApiWrapper
             dic.Add(psList.IndexOf(found), stream);
 
         var objs = new List<object?>();
-        var psValueList = psValue.ToList();
+        //var psValueList = psValue.ToList();
+        var psValueList = new List<object?>();
+        for (int i = 0; i < psValue.Length; i++)
+        {
+            if (psValue[i] is JsonElement jsonElement)
+            {
+                var parameterInfo = psList[i];
+                var item = jsonElement.Deserialize(parameterInfo.ParameterType);
+                psValueList.Add(item);
+            }
+        }
 
         //Sort params
         for (var i = 0; i < ps.Length; i++)

@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <Description>Contract attribute define for NetRpc.</Description>
     <RootNamespace>NetRpc</RootNamespace>
     <SignAssembly>true</SignAssembly>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>NetRpc.Contract.Json</PackageId>
   </PropertyGroup>
 
 </Project>

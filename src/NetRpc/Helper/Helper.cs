@@ -166,19 +166,26 @@ public static class Helper
         if (obj == null)
             return null;
 
-        using var stream = new MemoryStream();
-        var formatter = new BinaryFormatter();
-#pragma warning disable SYSLIB0011
-        formatter.Serialize(stream, obj);
-#pragma warning restore SYSLIB0011
-        stream.Flush();
-        return stream.ToArray();
-    }
+        var content = JsonSerializer.Serialize(obj);
+        return Encoding.UTF8.GetBytes(content);
 
-    [return: NotNullIfNotNull("bytes")]
-    public static T ToObject<T>(this byte[]? bytes)
+//         using var stream = new MemoryStream();
+//         var formatter = new BinaryFormatter();
+// #pragma warning disable SYSLIB0011
+//         formatter.Serialize(stream, obj);
+// #pragma warning restore SYSLIB0011
+//         stream.Flush();
+//         return stream.ToArray();
+    }
+    
+    public static T? ToObject<T>(this byte[]? bytes)
     {
-        return (T)bytes.ToObject()!;
+        if (bytes == null)
+            return default;
+        var content = Encoding.UTF8.GetString(bytes);
+        return JsonSerializer.Deserialize<T>(content);
+
+        //return (T)bytes.ToObject()!;
     }
 
     [return: NotNullIfNotNull("bytes")]

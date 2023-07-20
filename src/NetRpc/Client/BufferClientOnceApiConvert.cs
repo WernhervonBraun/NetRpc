@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO.Pipelines;
+﻿using System.IO.Pipelines;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
 namespace NetRpc;
@@ -155,8 +155,10 @@ internal sealed class BufferClientOnceApiConvert : IClientOnceApiConvert
                     return;
 
                 _resultReceived = true;
-                if (TryToObject(r.Body, out CustomResult body))
+                if (TryToObject(r.Body, out CustomResult? body))
                 {
+                    if (body == null)
+                        throw new NullReferenceException();
                     if (body.HasStream)
                     {
                         _streamResultReceived = true;
@@ -242,7 +244,7 @@ internal sealed class BufferClientOnceApiConvert : IClientOnceApiConvert
         ResultStream?.Invoke(this, e);
     }
 
-    private bool TryToObject(ReadOnlyMemory<byte> body, [NotNullWhen(true)] out object? obj)
+    private bool TryToObject(ReadOnlyMemory<byte> body, out object? obj)
     {
         var array = body.ToArray();
 
@@ -259,11 +261,22 @@ internal sealed class BufferClientOnceApiConvert : IClientOnceApiConvert
         }
     }
 
-    private bool TryToObject<T>(ReadOnlyMemory<byte> body, out T obj)
+    private bool TryToObject<T>(ReadOnlyMemory<byte> body, out T? obj)
     {
         if (TryToObject(body, out var obj2))
         {
-            obj = (T)obj2;
+            if (obj2 == null)
+                obj = default;
+            else
+            {
+                if (obj2 is JsonElement jsonElement)
+                {
+                    obj = jsonElement.Deserialize<T>();
+                } else
+                {
+                    obj = (T) obj2;
+                }
+            }
             return true;
         }
 
