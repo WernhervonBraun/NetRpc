@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Text.Json;
 
 namespace NetRpc.Contract;
 
@@ -17,7 +19,10 @@ public static class ExceptionExtensions
         foreach (var p in e.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance))
         {
             var bytes = (byte[])info.GetValue(p.Name, typeof(byte[]))!;
-            var value = bytes.ToObject();
+            var content = Encoding.UTF8.GetString(bytes);
+            var value = JsonSerializer.Deserialize(content, p.PropertyType);
+            
+            //var value = bytes.ToObject();
             p.SetValue(e, value);
         }
     }
@@ -27,13 +32,16 @@ public static class ExceptionExtensions
         if (obj == null)
             return null;
 
-        using var stream = new MemoryStream();
-        var formatter = new BinaryFormatter();
-#pragma warning disable SYSLIB0011
-        formatter.Serialize(stream, obj);
-#pragma warning restore SYSLIB0011
-        stream.Flush();
-        return stream.ToArray();
+        var content = JsonSerializer.Serialize(obj);
+        return Encoding.UTF8.GetBytes(content);
+
+//         using var stream = new MemoryStream();
+//         var formatter = new BinaryFormatter();
+// #pragma warning disable SYSLIB0011
+//         formatter.Serialize(stream, obj);
+// #pragma warning restore SYSLIB0011
+//         stream.Flush();
+//         return stream.ToArray();
     }
 
     private static object? ToObject(this byte[]? bytes)

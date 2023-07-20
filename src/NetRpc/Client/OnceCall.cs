@@ -117,7 +117,7 @@ public sealed class OnceCall : IOnceCall
         return t32;
     }
 
-    private void SetStreamResult(TaskCompletionSource<object?> tcs, object result)
+    private void SetStreamResult(TaskCompletionSource<object?> tcs, object? result)
     {
         _callbackDispatcher?.Dispose();
 
@@ -143,7 +143,7 @@ public sealed class OnceCall : IOnceCall
         tcs.TrySetCanceled();
     }
 
-    private async Task SetFaultAsync(TaskCompletionSource<object?> tcs, object result)
+    private async Task SetFaultAsync(TaskCompletionSource<object?> tcs, object? result)
     {
         if (result is SerializationException { Message: Const.DeserializationFailure } &&
             _callParam != null)
@@ -157,7 +157,7 @@ public sealed class OnceCall : IOnceCall
 
         //current thread is receive thread by lower layer (rabbitMQ or Grpc), can not be block.
 #pragma warning disable CS4014
-        Task.Run(() => { tcs.TrySetException((Exception)result); });
+        Task.Run(() => { tcs.TrySetException( result!= null? (Exception)result:new NullReferenceException()); });
 #pragma warning restore CS4014
     }
 

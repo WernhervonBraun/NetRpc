@@ -70,7 +70,7 @@ public class CacheTypeBuilder
             TypeAttributes.Public);
 
         AddPropertyToTypeBuilder(typeBuilder, ps);
-        return typeBuilder.CreateTypeInfo();
+        return typeBuilder.CreateTypeInfo()!;
     }
 
     private static void AddPropertyToTypeBuilder(TypeBuilder myTypeBuilder, List<CustomsPropertyInfo> ps)

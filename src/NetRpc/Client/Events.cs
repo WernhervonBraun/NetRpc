@@ -2,10 +2,10 @@
 
 public sealed class EventArgsT<T> : EventArgs
 {
-    public EventArgsT(T value)
+    public EventArgsT(T? value)
     {
         Value = value;
     }
 
-    public T Value { get; }
+    public T? Value { get; }
 }

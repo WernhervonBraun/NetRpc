@@ -65,7 +65,8 @@ internal sealed class BufferServiceOnceApiConvert : IServiceOnceApiConvert
     {
         var requestBody = await _cmdReq.ReceiveAsync();
         var ocp = requestBody.ToObject<OnceCallParam>();
-
+        if (ocp == null)
+            throw new NullReferenceException();
         //stream
         ProxyStream? rs;
         if (ocp.HasStream)
